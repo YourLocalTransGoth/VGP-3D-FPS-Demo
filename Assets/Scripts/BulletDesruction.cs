@@ -6,21 +6,42 @@ public class BulletDesctrucion : MonoBehaviour
 
 {
     public float bulletSpan = 5000;
-    public PlayerMovement player;
+    public float damageAmount = 1f;
+
+    private bool hasHit;
 
     // Start is called before the first frame update
     void Awake()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
         Destroy(gameObject, bulletSpan);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        TryDamageEnemy(collision.collider);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.SetActive(false);
-        Debug.Log("It was trigger");
+        TryDamageEnemy(other);
+    }
+
+    private void TryDamageEnemy(Collider other)
+    {
+        if (hasHit)
+        {
+            return;
+        }
+
+        EnemyHealth enemyHealth = other.GetComponentInParent<EnemyHealth>();
+        if (enemyHealth == null)
+        {
+            return;
+        }
+
+        hasHit = true;
+        enemyHealth.TakeDamage(damageAmount);
         Destroy(gameObject);
-        player.numOfEnDest++;
     }
 
  

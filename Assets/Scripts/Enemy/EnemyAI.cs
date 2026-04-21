@@ -36,10 +36,26 @@ public class EnemyAI : MonoBehaviour
     public bool playerInSightRange;
     public bool playerInAttackRange;
 
+    private void Awake()
+    {
+        if (agent == null)
+        {
+            agent = GetComponent<NavMeshAgent>();
+        }
+
+        if (player == null)
+        {
+            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null)
+            {
+                player = playerObject.transform;
+            }
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        //player = GameObject.Find("Player").GetComponent<Transform>();
         agent = GetComponent<NavMeshAgent>();
 
 
@@ -59,21 +75,23 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (agent == null || player == null)
+        {
+            return;
+        }
+
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatISplayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatISplayer);
 
-        if (playerInSightRange == false && playerInAttackRange == false)
-        {
-            Patrolling();
-        }
-        else if (playerInSightRange == true && playerInAttackRange == false)
-        {
-            ChasePlayer();
-        }
-        else if (playerInSightRange == true && playerInAttackRange == true)
+        if (playerInAttackRange == true)
         {
             AttackPlayer();
         }
+        else
+        {
+            ChasePlayer();
+        }
+
         if (timeBetweenAttacks > 0)
         {
             alreadyAttacked = true;
@@ -99,12 +117,22 @@ public class EnemyAI : MonoBehaviour
 
     void ChasePlayer()
     {
+        if (player == null)
+        {
+            return;
+        }
+
         agent.SetDestination(player.position);
     }
 
 
     void AttackPlayer()
     {
+        if (player == null)
+        {
+            return;
+        }
+
         agent.SetDestination(player.position);
         transform.LookAt(player);
         if (alreadyAttacked == false)

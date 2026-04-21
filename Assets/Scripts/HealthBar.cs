@@ -11,19 +11,49 @@ public class HealthBar : MonoBehaviour
 
     void Awake()
     {
-       UpdateHealthBar(1.00);
+        if (healthBarSprite == null)
+        {
+            healthBarSprite = GetComponent<Image>();
+        }
+
+        if (healthBarSprite != null)
+        {
+            healthBarSprite.type = Image.Type.Filled;
+        }
+
+        if (Player == null)
+        {
+            Player = GameObject.FindGameObjectWithTag("Player");
+        }
+
+        UpdateHealthBar(1f);
     }
    
 
 
-    public void UpdateHealthBar( double updatedHealth)
+    public void UpdateHealthBar(float updatedHealth)
     {
+        if (healthBarSprite == null)
+        {
+            return;
+        }
     
-        healthBarSprite.fillAmount = (float)updatedHealth;
+        float clampedHealth = Mathf.Clamp01(updatedHealth);
+        healthBarSprite.fillAmount = clampedHealth;
 
-        if (updatedHealth <= 0)
+        if (clampedHealth <= 0f && Player != null)
         {
             Destroy(Player);
         }
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        if (healthBarSprite == null)
+        {
+            return;
+        }
+
+        UpdateHealthBar(healthBarSprite.fillAmount - damageAmount);
     }
 }

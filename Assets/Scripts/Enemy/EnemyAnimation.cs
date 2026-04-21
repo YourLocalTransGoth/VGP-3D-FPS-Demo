@@ -5,14 +5,22 @@ public class PlayerAnimationController : MonoBehaviour
     private Animator anim;
     [SerializeField] private string runStateName = "Run";
 
-    void Start()
+    void Awake()
     {
-        // Get the Animator component attached to this GameObject
         anim = GetComponent<Animator>();
+        if (anim == null)
+        {
+            anim = GetComponentInChildren<Animator>();
+        }
     }
 
     void Update()
     {
+        if (anim == null)
+        {
+            return;
+        }
+
         // 1. Attack (Trigger)
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -43,12 +51,22 @@ public class PlayerAnimationController : MonoBehaviour
     // Helper method to keep the code clean
     private void SetAnimationState(bool running, bool idle)
     {
+        if (anim == null)
+        {
+            return;
+        }
+
         anim.SetBool("isRunning", running);
         anim.SetBool("isIdle", idle);
     }
 
     private void KeepRunLooping()
     {
+        if (anim == null)
+        {
+            return;
+        }
+
         if (!anim.GetBool("isRunning"))
         {
             return;

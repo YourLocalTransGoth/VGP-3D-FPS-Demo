@@ -16,12 +16,20 @@ public class AttackPrefabScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        GameObject hitObject = collision.gameObject;
+        GameObject hitRoot = hitObject.transform.root.gameObject;
+        bool isPlayerHit = hitObject.CompareTag("Player")
+            || hitRoot.CompareTag("Player")
+            || hitRoot.GetComponentInChildren<PlayerMovement>() != null;
+
+        if (isPlayerHit)
         {
             GunShoot.enemyDestroyed++;
-                double updatedHealth = healthBar.healthBarSprite.fillAmount - 0.2;
-            healthBar.UpdateHealthBar(updatedHealth);
-            Destroy(collision.gameObject);
+            if (healthBar != null)
+            {
+                healthBar.TakeDamage(0.2f);
+            }
+
             Destroy(gameObject);
         }
     }
