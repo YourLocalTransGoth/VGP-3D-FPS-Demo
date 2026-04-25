@@ -67,6 +67,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateController.IsGamePaused)
+        {
+            return;
+        }
+
         HandleMouseLook();
         HandleMovement();
 
@@ -78,6 +83,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameStateController.IsGamePaused)
+        {
+            return;
+        }
+
         HandleGunFollow();
     }
 

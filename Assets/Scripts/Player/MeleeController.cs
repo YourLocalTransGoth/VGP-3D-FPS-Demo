@@ -27,6 +27,11 @@ public class MeleeController : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateController.IsGamePaused)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0) && CanAttack)
         {
             Attack();
@@ -35,6 +40,11 @@ public class MeleeController : MonoBehaviour
 
     public void Attack()
     {
+        if (GameStateController.IsGamePaused)
+        {
+            return;
+        }
+
         if (!CanAttack)
         {
             return;

@@ -29,6 +29,10 @@ public class GameStateController : MonoBehaviour
     }
 
     public static GameStateController Instance { get; private set; }
+    public static bool IsGamePaused
+    {
+        get { return Instance != null && Instance.isPaused; }
+    }
 
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private string mainMenuSceneName = "MainMenu";
@@ -92,7 +96,7 @@ public class GameStateController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M) && !isPaused)
+        if (Input.GetKeyDown(KeyCode.Escape) && !isPaused)
         {
             GoToMainMenu();
         }

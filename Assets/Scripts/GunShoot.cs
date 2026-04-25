@@ -24,6 +24,11 @@ public class GunShoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameStateController.IsGamePaused)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             if (audioPlayer != null)

@@ -14,6 +14,11 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
+        if (GameStateController.IsGamePaused)
+        {
+            return;
+        }
+
         int previousSelectedWeapon = selectedWeapon;
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
